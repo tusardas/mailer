@@ -1,7 +1,3 @@
-create database if not exists mailer;
-
-use mailer;
-
 create table if not exists users(
 	id int(10) not null auto_increment,
 	userId int(25) not null unique,
