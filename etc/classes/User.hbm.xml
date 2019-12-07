@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping SYSTEM "hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping auto-import="true" default-lazy="false">
+    
+    <class name="org.mailer.object.User" table="users">
+		
+		<id name="id" column="id" type="java.lang.Long">
+   			<generator class="increment"></generator>
+   		</id>
+   		
+        <property
+            name="userId"
+            type="java.lang.Long"
+            update="true"
+            insert="true"
+            column="userId"
+        />
+
+         <property
+            name="userCategory"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="userCategory"
+        />
+        
+        <property
+            name="email"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="email"
+        />
+        
+        <property
+            name="password"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="password"
+        />
+        
+    </class>
+
+</hibernate-mapping>

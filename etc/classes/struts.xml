@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation"
+		value="false" />
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.custom.i18n.resources"
+		value="ApplicationResources" />
+	
+	<package name="default" extends="struts-default">
+               
+		<result-types>
+			<result-type name="tiles"
+				class="org.apache.struts2.views.tiles.TilesResult" />
+		</result-types>
+		
+		<interceptors>
+			 <interceptor name="params" class="com.opensymphony.xwork2.interceptor.ParametersInterceptor"/>
+			 <interceptor name="AdminAuthInterceptor" class="org.mailer.interceptor.AdminAuthenticationInterceptor"/>
+			 <interceptor name="UserAuthInterceptor" class="org.mailer.interceptor.UserAuthenticationInterceptor"/>
+			 <interceptor name="parameterFilter" class="com.opensymphony.xwork2.interceptor.ParameterFilterInterceptor" />  
+			 
+			 <interceptor-stack name="adminAuthStack">
+			 	<interceptor-ref name="AdminAuthInterceptor"/> 
+			 	<interceptor-ref name="defaultStack"/>
+			 </interceptor-stack>
+			 
+			 <interceptor-stack name="userAuthStack">
+			 	<interceptor-ref name="UserAuthInterceptor"/> 
+			 	<interceptor-ref name="defaultStack"/>
+			 </interceptor-stack>
+			 
+		</interceptors>
+	
+		<global-results>
+			<result name="loginNeeded" type="redirectAction">login_page</result>
+		</global-results>
+		
+		<action name="home">
+			<result>/WEB-INF/jsp/home.jsp</result>
+		</action>
+		
+		<action name="login_page">
+			<result>/WEB-INF/jsp/login.jsp</result>
+		</action>
+		
+		<action name="about_page">
+			<result>/WEB-INF/jsp/about.jsp</result>
+		</action>
+		
+		<action name="login" method="authVerify" class="org.mailer.action.LoginAction">
+			<result name="input">/WEB-INF/jsp/login.jsp</result>
+			<result name="success">/WEB-INF/jsp/welcomeUser.jsp</result>
+		</action>
+				
+		<action name="logout" method="clearSession" class="org.mailer.action.LoginAction">
+	    	<result name="success" type="redirectAction">login_page</result>
+		</action>
+		
+		<action name="user_home">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result>/WEB-INF/jsp/welcomeUser.jsp</result>
+		</action>
+		
+		<action name="send_campaign" class="org.mailer.action.CampaignSenderAction" method="loadCampaign">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="success">/WEB-INF/jsp/sendCampaign.jsp</result>
+		</action>
+		
+		<action name="send_now" class="org.mailer.action.CampaignSenderAction" method="sendNow">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="input">/WEB-INF/jsp/sendCampaign.jsp</result>
+			<result name="success">/WEB-INF/jsp/sendCampaign.jsp</result>
+		</action>
+		
+		<action name="edit_profile" class="org.mailer.action.SenderProfileAction" method="loadProfile">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="success">/WEB-INF/jsp/editProfile.jsp</result>
+		</action>
+		
+		<action name="update_profile" class="org.mailer.action.SenderProfileAction" method="updateProfile">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="input">/WEB-INF/jsp/editProfile.jsp</result>
+			<result name="success">/WEB-INF/jsp/editProfile.jsp</result>
+		</action>
+		
+		<action name="manage_contacts" class="org.mailer.action.ContactAction" method="listContacts">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="success">/WEB-INF/jsp/manageContacts.jsp</result>
+		</action>
+		
+		<action name="add_contact" class="org.mailer.action.ContactAction" method="addContact">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="success" type="redirectAction">manage_contacts</result>
+			<result name="input">/WEB-INF/jsp/manageContacts.jsp</result>
+		</action>
+		
+		<action name="delete_contact" class="org.mailer.action.ContactAction" method="deleteContact">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="success" type="redirectAction">manage_contacts</result>
+			<result name="input">/WEB-INF/jsp/manageContacts.jsp</result>
+		</action>
+		
+		<action name="contacts_upload" class="org.mailer.action.ContactAction" method="contactsUpload">
+			<interceptor-ref name="fileUpload">
+        		<param name="maximumSize">2097152</param>
+        		<param name="allowedTypes">
+        			application/vnd.ms-excel
+        		</param>
+        	</interceptor-ref>
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+        	<result name="input">/WEB-INF/jsp/manageContacts.jsp</result>
+			<result name="success" type="redirectAction">manage_contacts</result>
+		</action>
+		
+		<action name="manage_campaigns" class="org.mailer.action.CampaignAction" method="listCampaigns">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="success">/WEB-INF/jsp/manageCampaigns.jsp</result>
+		</action>
+		
+		<action name="add_campaign" class="org.mailer.action.CampaignAction" method="addCampaign">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="success" type="redirectAction">manage_campaigns</result>
+			<result name="input">/WEB-INF/jsp/manageCampaigns.jsp</result>
+		</action>
+		
+		<action name="delete_campaign" class="org.mailer.action.CampaignAction" method="deleteCampaign">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="success" type="redirectAction">manage_campaigns</result>
+			<result name="input">/WEB-INF/jsp/manageCampaigns.jsp</result>
+		</action>
+		
+		<action name="edit_campaign" class="org.mailer.action.CampaignAction" method="loadCampaign">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="success">/WEB-INF/jsp/editCampaign.jsp</result>
+		</action>
+		
+		<action name="update_campaign" class="org.mailer.action.CampaignAction" method="updateCampaign">
+			<interceptor-ref name="userAuthStack"></interceptor-ref>
+			<result name="input">/WEB-INF/jsp/editCampaign.jsp</result>
+			<result name="success">/WEB-INF/jsp/editCampaign.jsp</result>
+		</action>
+		
+		<action name="manage_users" class="org.mailer.action.UserAction" method="listUsers">
+			<interceptor-ref name="adminAuthStack"></interceptor-ref>
+			<result name="success">/WEB-INF/jsp/manageUsers.jsp</result>
+		</action>
+		
+		<action name="add_user" class="org.mailer.action.UserAction" method="addUser">
+			<interceptor-ref name="adminAuthStack"></interceptor-ref>
+			<result name="success" type="redirectAction">manage_users</result>
+			<result name="input">/WEB-INF/jsp/manageUsers.jsp</result>
+		</action>
+		
+		<action name="delete_user" class="org.mailer.action.UserAction" method="deleteUser">
+			<interceptor-ref name="adminAuthStack"></interceptor-ref>
+			<result name="success" type="redirectAction">manage_users</result>
+			<result name="input">/WEB-INF/jsp/manageUsers.jsp</result>
+		</action>
+		
+	</package>
+	
+</struts>

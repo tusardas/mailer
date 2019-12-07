@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping SYSTEM "hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping auto-import="true" default-lazy="false">
+    
+    <class name="org.mailer.object.SenderProfile" table="sender_profile">
+		
+		<id name="id" column="id" type="java.lang.Long">
+   			<generator class="increment"></generator>
+   		</id>
+   		
+        <property
+            name="senderId"
+            type="java.lang.Long"
+            update="true"
+            insert="true"
+            column="senderId"
+        />
+
+         <property
+            name="host"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="host"
+        />
+        
+        <property
+            name="username"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="username"
+        />
+        
+        <property
+            name="password"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="password"
+        />
+        
+        <property
+            name="protocol"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="protocol"
+        />
+        
+        <property
+            name="port"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="port"
+        />
+        
+        <property
+            name="preferredName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="preferredName"
+        />    
+        
+    </class>
+
+</hibernate-mapping>

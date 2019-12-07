@@ -1,0 +1,21 @@
+<!DOCTYPE validators PUBLIC
+        "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+        "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="emailAddress">
+    	<field-validator type="requiredstring" short-circuit="true">
+            <message>Please enter email.</message>
+        </field-validator>
+        <field-validator type="stringlength" short-circuit="true"> 
+		    <param name="minLength">1</param> 
+		    <param name="maxLength">255</param> 
+		    <message> 
+		       Email address must be between 1 and 255 characters. 
+		    </message> 
+		</field-validator>
+        <field-validator type="email">
+            <message>Invalid email address.</message>
+        </field-validator>
+    </field>
+</validators>

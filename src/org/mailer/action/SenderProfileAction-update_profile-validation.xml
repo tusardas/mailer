@@ -1,0 +1,69 @@
+<!DOCTYPE validators PUBLIC
+        "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+        "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+	<field name="host">
+        <field-validator type="requiredstring" short-circuit="true">
+            <message>Please enter hostname.</message>
+        </field-validator>
+        <field-validator type="stringlength"> 
+		    <param name="minLength">1</param> 
+		    <param name="maxLength">255</param> 
+		    <message> 
+		       Password must be between 1 and 255 characters. 
+		    </message> 
+		</field-validator>
+    </field>
+    <field name="username">
+    	<field-validator type="requiredstring" short-circuit="true">
+            <message>Please enter username(email).</message>
+        </field-validator>
+        <field-validator type="stringlength" short-circuit="true"> 
+		    <param name="minLength">1</param> 
+		    <param name="maxLength">255</param> 
+		    <message> 
+		       Email address must be between 1 and 255 characters. 
+		    </message> 
+		</field-validator>
+        <field-validator type="email">
+            <message>Invalid email address.</message>
+        </field-validator>
+    </field>
+    <field name="password">
+        <field-validator type="requiredstring" short-circuit="true">
+            <message>Please enter password.</message>
+        </field-validator>
+        <field-validator type="stringlength"> 
+		    <param name="minLength">1</param> 
+		    <param name="maxLength">25</param> 
+		    <message> 
+		       Password must be between 1 and 25 characters. 
+		    </message> 
+		</field-validator>
+    </field>
+    <field name="protocol">
+        <field-validator type="requiredstring" short-circuit="true">
+            <message>Please enter protocol.</message>
+        </field-validator>
+        <field-validator type="stringlength"> 
+		    <param name="minLength">1</param> 
+		    <param name="maxLength">25</param> 
+		    <message> 
+		       Protocol must be between 1 and 25 characters. 
+		    </message> 
+		</field-validator>
+    </field>
+    <field name="port">
+        <field-validator type="requiredstring" short-circuit="true">
+            <message>Please enter port number.</message>
+        </field-validator>
+        <field-validator type="stringlength"> 
+		    <param name="minLength">1</param> 
+		    <param name="maxLength">25</param> 
+		    <message> 
+		       Port must be between 1 and 25 characters. 
+		    </message> 
+		</field-validator>
+    </field>
+</validators>

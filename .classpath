@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="srclibs/commons-logging.jar"/>
+	<classpathentry kind="lib" path="srclibs/mail.jar"/>
+	<classpathentry kind="lib" path="srclibs/velocity-1.4.jar"/>
+	<classpathentry kind="lib" path="srclibs/log4j-1.2.12.jar"/>
+	<classpathentry kind="lib" path="srclibs/struts2-core-2.1.8.1.jar"/>
+	<classpathentry kind="lib" path="srclibs/spring.jar"/>
+	<classpathentry kind="lib" path="srclibs/tiles-jsp-2.0.6.jar"/>
+	<classpathentry kind="lib" path="srclibs/hibernate.jar"/>
+	<classpathentry kind="lib" path="srclibs/xwork-core-2.1.6.jar"/>
+	<classpathentry kind="lib" path="srclibs/commons-io.jar"/>
+	<classpathentry kind="lib" path="srclibs/commons-fileupload.jar"/>
+	<classpathentry kind="lib" path="srclibs/jxl-2.4.2.jar"/>
+	<classpathentry kind="lib" path="srclibs/commons-codec-1.5.jar"/>
+	<classpathentry kind="lib" path="srclibs/servlet-api.jar"/>
+	<classpathentry kind="lib" path="srclibs/apache-solr-solrj-3.4.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

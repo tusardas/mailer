@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/database.properties</value>
+				<value>/WEB-INF/mailer.properties</value>
+			</list>
+		</property>
+	</bean>
+    <bean id="mailSender" class="org.mailer.utils.MailSender">
+		<property name="host" value="${mail_sender_host}"/>
+		<property name="username" value="${mail_sender_username}"/>
+		<property name="password" value="${mail_sender_password}"/>
+		<property name="port" value="${mail_sender_port}"/>
+		<property name="protocol" value="${mail_sender_protocol}"/>
+		<property name="smtpAuthentication" value="${mail_sender_smtp_authentication}"/>
+		<property name="fromAddress" value="${mail_sender_from_address}"/>
+	</bean>
+  	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName">
+            <value>${hibernate.connection.driver_class}</value>
+        </property>
+        <property name="url">
+            <value>${hibernate.connection.url}</value>
+        </property>
+        <property name="username">
+            <value>${hibernate.connection.username}</value>
+        </property>
+        <property name="password">
+            <value>${hibernate.connection.password}</value>
+        </property>
+    </bean>
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>User.hbm.xml</value>
+				<value>Contact.hbm.xml</value>
+				<value>Campaign.hbm.xml</value>
+				<value>SenderProfile.hbm.xml</value>
+			</list>
+		</property>
+		
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">none</prop> <!--- NEVER CHANGE THIS -->
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<!-- <prop key="hibernate.cache.use_query_cache">true</prop>  -->
+				<prop key="hibernate.bytecode.use_reflection_optimizer">false</prop>
+				<prop key="hibernate.jdbc.batch_size">0</prop>
+				<prop key="hibernate.query.substitutions">true 'T', false 'F'</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="dbProvider" class="org.mailer.persistance.BasePersistenceImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="userPersistance" class="org.mailer.persistance.UserPersistance" parent="dbProvider">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+		
+	<bean id="userServiceTarget" class="org.mailer.service.UserService">
+		<property name="mailSender" ref="mailSender"/>
+		<property name="userPersistance" ref="userPersistance"/>
+	</bean>
+	
+	<bean id="userService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager"><ref bean="transactionManager"/></property>
+       <property name="target"><ref local="userServiceTarget"/></property>
+       <property name="proxyTargetClass"><value>true</value></property>
+       <property name="transactionAttributes">
+            <props>
+            	  <prop key="get*">PROPAGATION_SUPPORTS</prop>
+               	  <prop key="save*">PROPAGATION_REQUIRED</prop>
+               	  <prop key="update*">PROPAGATION_REQUIRED</prop>
+               	  <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                  <prop key="*">PROPAGATION_SUPPORTS</prop>
+            </props>
+       </property>
+    </bean>
+    
+    <bean id="contactPersistance" class="org.mailer.persistance.ContactPersistance" parent="dbProvider">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+		
+	<bean id="contactServiceTarget" class="org.mailer.service.ContactService">
+		<property name="contactPersistance" ref="contactPersistance"/>
+	</bean>
+	
+	<bean id="contactService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager"><ref bean="transactionManager"/></property>
+       <property name="target"><ref local="contactServiceTarget"/></property>
+       <property name="proxyTargetClass"><value>true</value></property>
+       <property name="transactionAttributes">
+            <props>
+            	  <prop key="get*">PROPAGATION_SUPPORTS</prop>
+               	  <prop key="save*">PROPAGATION_REQUIRED</prop>
+               	  <prop key="update*">PROPAGATION_REQUIRED</prop>
+               	  <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                  <prop key="*">PROPAGATION_SUPPORTS</prop>
+            </props>
+       </property>
+    </bean>
+    
+    <bean id="campaignPersistance" class="org.mailer.persistance.CampaignPersistance" parent="dbProvider">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+		
+	<bean id="campaignServiceTarget" class="org.mailer.service.CampaignService">
+		<property name="campaignPersistance" ref="campaignPersistance"/>
+	</bean>
+	
+	<bean id="campaignService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager"><ref bean="transactionManager"/></property>
+       <property name="target"><ref local="campaignServiceTarget"/></property>
+       <property name="proxyTargetClass"><value>true</value></property>
+       <property name="transactionAttributes">
+            <props>
+            	  <prop key="get*">PROPAGATION_SUPPORTS</prop>
+               	  <prop key="save*">PROPAGATION_REQUIRED</prop>
+               	  <prop key="update*">PROPAGATION_REQUIRED</prop>
+               	  <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                  <prop key="*">PROPAGATION_SUPPORTS</prop>
+            </props>
+       </property>
+    </bean>
+    
+    <bean id="senderProfilePersistance" class="org.mailer.persistance.SenderProfilePersistance" parent="dbProvider">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+		
+	<bean id="senderProfileServiceTarget" class="org.mailer.service.SenderProfileService">
+		<property name="senderProfilePersistance" ref="senderProfilePersistance"/>
+		<property name="mailSender" ref="mailSender"/>
+		<property name="campaignPersistance" ref="campaignPersistance"/>
+	</bean>
+	
+	<bean id="senderProfileService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+       <property name="transactionManager"><ref bean="transactionManager"/></property>
+       <property name="target"><ref local="senderProfileServiceTarget"/></property>
+       <property name="proxyTargetClass"><value>true</value></property>
+       <property name="transactionAttributes">
+            <props>
+            	  <prop key="get*">PROPAGATION_SUPPORTS</prop>
+               	  <prop key="save*">PROPAGATION_REQUIRED</prop>
+               	  <prop key="update*">PROPAGATION_REQUIRED</prop>
+               	  <prop key="delete*">PROPAGATION_REQUIRED</prop>
+                  <prop key="*">PROPAGATION_SUPPORTS</prop>
+            </props>
+       </property>
+    </bean>
+	
+	
+</beans>

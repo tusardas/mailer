@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping SYSTEM "hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping auto-import="true" default-lazy="false">
+    
+    <class name="org.mailer.object.Contact" table="contacts">
+		
+		<id name="id" column="id" type="java.lang.Long">
+   			<generator class="increment"></generator>
+   		</id>
+   		
+        <property
+            name="contactId"
+            type="java.lang.Long"
+            update="true"
+            insert="true"
+            column="contactId"
+        />
+        
+        <property
+            name="uploadedBy"
+            type="java.lang.Long"
+            update="true"
+            insert="true"
+            column="uploadedBy"
+        />
+
+        <property
+            name="emailAddress"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="emailAddress"
+        />
+		       
+        <property
+            name="firstName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="firstName"
+        />
+        
+        <property
+            name="lastName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="lastName"
+        />
+        
+        <property
+            name="gender"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="gender"
+        />
+    </class>
+
+</hibernate-mapping>

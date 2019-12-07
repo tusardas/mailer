@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping SYSTEM "hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping auto-import="true" default-lazy="false">
+    
+    <class name="org.mailer.object.Campaign" table="campaigns">
+		
+		<id name="id" column="id" type="java.lang.Long">
+   			<generator class="increment"></generator>
+   		</id>
+        <property
+            name="campaignId"
+            type="java.lang.Long"
+            update="true"
+            insert="true"
+            column="campaignId"
+        />
+        <property
+            name="createdBy"
+            type="java.lang.Long"
+            update="true"
+            insert="true"
+            column="createdBy"
+        />
+        <property
+            name="campaignName"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="campaignName"
+        />
+        <property
+            name="subject"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="subject"
+        />
+        <property
+            name="body"
+            type="java.lang.String"
+            update="true"
+            insert="true"
+            column="body"
+        />
+        <property
+            name="modifiedOn"
+            type="java.util.Date"
+            update="false"
+            insert="false"
+            column="modifiedOn"
+        />
+        <property
+            name="triggeredOn"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            column="triggeredOn"
+        />
+        <property
+            name="numberOfTargets"
+            type="java.lang.Long"
+            update="true"
+            insert="true"
+            column="numberOfTargets"
+        />
+    </class>
+
+</hibernate-mapping>

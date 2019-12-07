@@ -1,0 +1,116 @@
+<project name="mailer" default="help" basedir=".">
+
+	<property file="project.properties"/>
+	<property environment="myenv" />
+	<property name="appName" value="${context}" />
+	<property name="deploy" value="${myenv.CATALINA_HOME}/webapps" />
+	<property name="webapp" value="${deploy}/${context}" />
+	<property name="deploy.jsp" value="${webapp}/WEB-INF/jsp" />
+	<property name="deploy.class" value="${webapp}/WEB-INF/classes" />
+	<property name="src.jsp" value="webContent/jsp" />
+	<property name="src.static" value="webContent/static" />
+	<property name="src.index" value="webContent/index" />
+	<property name="src.class" value="src"/> 
+	<property name="src.lib" value="srclibs" />
+
+	<target name="help">
+		<echo>	Usage: ant [target]
+	
+	Available targets:
+
+	init	: Initializes context name of the project.
+
+	prepare : Creates the directories required for the project.
+
+	compile : Compiles all .java files and copies the .class files to deploy directory.
+
+	copy	: Copies the .jar files, .xml files, .properties files to deploy directory.
+
+	jsp	: Copies the .jsp files and static files to deploy directory.
+
+	clean	: Deletes the deploy directories.
+
+	deploy	: First cleans deploy directory, then Compiles and copies all files to deploy directory.
+
+	help	: Displays this help.</echo>
+	</target>
+
+	<target name="init">
+		<input message="Enter Application Context (NO '/'):"
+			addproperty="context" />
+		<concat destfile="project.properties" append="false">context = ${context}
+		</concat>
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="${deploy}" />
+		<mkdir dir="${webapp}" />
+		<mkdir dir="${webapp}/WEB-INF/classes" />
+		<mkdir dir="${webapp}/WEB-INF/lib" />
+	</target>
+	
+	<path id="project.classpath">
+		<fileset dir="${src.lib}" includes="*.jar" />
+	</path>
+	
+	<target name="get.local.classpath">
+		<property name="classpath" refid="project.classpath" />
+	</target>
+
+	<target name="compile" depends="init, prepare, get.local.classpath" 
+          	description="Compiles all source code."> 
+    		<javac srcdir="${src.class}" destdir="${deploy.class}" debug="true">
+			<classpath>
+				<pathelement path="${classpath}" />
+			</classpath>
+		</javac>
+  	</target> 
+
+	<target name="copy" depends="init, prepare">
+		<fileset id="hbm.xml.files" dir="src">
+			<include name="**/*.hbm.xml" />
+			<include name="**/*.properties" />
+			<include name="**/*.xml" />
+		</fileset>
+		<copy todir="${deploy.class}">
+			<fileset refid="hbm.xml.files" />
+		</copy>
+		<copy todir="${webapp}/WEB-INF/classes">
+			<fileset dir="etc/classes">
+				<include name="**/*.xml"/>
+				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
+		<copy todir="${webapp}/WEB-INF/">
+			<fileset dir="etc">
+				<include name="**/*.xml"/>
+				<include name="**/*.properties"/>
+			</fileset> 
+		</copy>
+		<copy todir="${webapp}/WEB-INF/lib">
+			<fileset dir="${src.lib}" excludes="servlet-api.jar">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
+	</target>	
+
+	<target name="jsp" depends="init, prepare">
+		<copy todir="${deploy.jsp}">
+			<fileset dir="${src.jsp}" includes="**/*.jsp"/>
+		</copy>
+		<copy todir="${webapp}/web">
+			<fileset dir="${src.static}" />
+		</copy>
+		<copy todir="${webapp}">
+			<fileset dir="${src.index}" />
+		</copy>
+	</target>
+
+	<target name="clean">
+		<delete dir="${deploy}/${context}" />
+	</target>	
+	
+	<target name="deploy" depends="clean, copy, jsp, compile">
+	</target>		
+
+</project>

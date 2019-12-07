@@ -1,0 +1,30 @@
+<!DOCTYPE validators PUBLIC
+        "-//OpenSymphony Group//XWork Validator 1.0.2//EN"
+        "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+	<field name="subject">
+        <field-validator type="requiredstring" short-circuit="true">
+            <message>Please enter a subject.</message>
+        </field-validator>
+        <field-validator type="stringlength"> 
+		    <param name="minLength">1</param> 
+		    <param name="maxLength">255</param> 
+		    <message> 
+		       It must be between 1 and 255 characters. 
+		    </message> 
+		</field-validator>
+    </field>
+    <field name="body">
+        <field-validator type="requiredstring" short-circuit="true">
+            <message>Please enter body of campaign.</message>
+        </field-validator>
+        <field-validator type="stringlength"> 
+		    <param name="minLength">1</param> 
+		    <param name="maxLength">50000</param> 
+		    <message> 
+		       It must be between 1 and 50000 characters. 
+		    </message> 
+		</field-validator>
+    </field>
+</validators>

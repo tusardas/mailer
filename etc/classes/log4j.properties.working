@@ -1,0 +1,7 @@
+log4j.appender.MAIN_LOG=org.apache.log4j.RollingFileAppender
+log4j.appender.MAIN_LOG.File=F:/logs/mailer.log
+log4j.appender.MAIN_LOG.layout=org.mailer.utils.Log4JSimpleLayout
+log4j.appender.MAIN_LOG.MaxFileSize=1KB
+log4j.appender.MAIN_LOG.MaxBackupIndex=0
+log4j.appender.MAIN_LOG.append=true
+log4j.rootCategory=ALL, MAIN_LOG
